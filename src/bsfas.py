@@ -47,14 +47,11 @@ if cur_version > req_version:
     config.read('settings.ini')
 
     print("  ╔══════════════════════════════════════════════════════════════════════════╗")
-    print("  ║                             BFS Auto Search                              ║")
+    print("  ║                             BSF Auto Search                              ║")
     print("  ╚══════════════════════════════════════════════════════════════════════════╝")
 
     def test_connection():
-        """ Simple test to verify connection to Barracuda appliance.
-
-            TODO: Improve this test to verify that the URL is actually a Barracuda appliance.
-        """
+        """ Simple test to verify connection to Barracuda appliance. """
         try:
             if config['DEFAULT']['BARRACUDA_URL'] != "":
                 urllib.request.urlopen(config['DEFAULT']['BARRACUDA_URL'] + "/cgi-mod/index.cgi")
