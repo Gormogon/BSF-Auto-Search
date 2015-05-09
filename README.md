@@ -12,12 +12,15 @@ BFS Auto Search is a Python script that allows mass data entry into the Barracud
   ```
 pip install -r REQUIREMENTS
 ```
-3. Add your setting to the included ‘settings.ini’.
+3. Add your settings to the included ‘settings.ini’.
 4. Add your search data to the included ‘search.txt’ (one entry per line).
 5. Run the script:
   ```
 python bfsas.py
 ```
+
+### Contributing
+To find out how you can contribute, please look [here](https://github.com/Gormogon/BSF-Auto-Search/blob/master/CONTRIBUTING.md).
 
 ### Versioning
 
@@ -34,5 +37,12 @@ And constructed with the following guidelines:
  
 For more information on SemVer, please visit [http://semver.org](http://semver.org).
 
+For the changlog, please look [here](https://github.com/Gormogon/BSF-Auto-Search/blob/master/CHANGELOG.md).
+
 ### License
 GNU General Public License, Version 3 (GNU GPLv3)
+
+This project is __not__ affiliated with Barracuda Networks, Inc.
+
+### Thanks
+Thanks goes to the [Selenium Browser Automation](http://www.seleniumhq.org/) project. BSF Auto Search would not have been possible without it.
