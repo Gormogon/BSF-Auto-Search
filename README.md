@@ -1,5 +1,5 @@
 # BSF Auto Search
-BFS Auto Search is a Python script that allows mass data entry into the Barracuda Spam Firewall message log search using Selenium WebDriver browser automation.
+BSF Auto Search is a Python script that allows mass data entry into the Barracuda Spam Firewall message log search using Selenium WebDriver browser automation.
 
 ### Dependencies
 * Python > 3.4.0
@@ -17,7 +17,7 @@ pip install -r REQUIREMENTS
 4. Add your search data to the included ‘search.txt’ (one entry per line).
 5. Run the script:
   ```
-python bfsas.py
+python bsfas.py
 ```
 
 ### Contributing
