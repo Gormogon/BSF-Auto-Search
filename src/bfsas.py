@@ -21,7 +21,6 @@
 import argparse
 import configparser
 import ipaddress
-import os
 import re
 import ssl
 import sys
@@ -45,7 +44,7 @@ if cur_version > req_version:
     ssl._create_default_https_context = ssl._create_unverified_context
 
     config = configparser.ConfigParser()
-    config.read(os.path.join("settings.ini"))
+    config.read('settings.ini')
 
     print("  ╔══════════════════════════════════════════════════════════════════════════╗")
     print("  ║                             BFS Auto Search                              ║")
