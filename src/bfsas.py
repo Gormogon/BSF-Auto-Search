@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# BFS Auto Search: Barracuda Spam Firewall message log review with Selenium browser automation.
+# BSF Auto Search: Barracuda Spam Firewall message log review with Selenium browser automation.
 #    Copyright (C) 2015  Michael Sincavage
 #
 #       This program is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ if cur_version > req_version:
             if config['DEFAULT']['BARRACUDA_URL'] != "":
                 urllib.request.urlopen(config['DEFAULT']['BARRACUDA_URL'] + "/cgi-mod/index.cgi")
             else:
-                print("    > ERROR!: 'BARRACUDA_URL' cannot be empty.")
+                print("    > ERROR!: Required field is empty in settings file.")
                 sys.exit(1)
         except (KeyError, TypeError, ValueError):
             print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
@@ -79,6 +79,7 @@ if cur_version > req_version:
 
     args = parser.parse_args()
 
+    # Handle submitted arguments, test connection, assign a webdriver class, and handle unconficured webdrivers.
     if args.firefox:
         try:
             test_connection()
@@ -110,45 +111,49 @@ if cur_version > req_version:
         parser.print_help()
         sys.exit(0)
 
-    try:
+    try:  # Try to open the search data file.
         if config['DEFAULT']['SEARCH_DATA_FILE'] != "":
             with open(config['DEFAULT']['SEARCH_DATA_FILE']) as search_data:
-                try:
+                try:  # Try to visit the configured Barracuda appliance and wait until page is loaded.
                     print("    > Trying to go to your Barracuda appliance...")
-                    if config['DEFAULT']['BARRACUDA_URL'] != "":
+                    if config['DEFAULT']['BARRACUDA_URL'] != "" and config['DEFAULT']['TIMEOUT'] != "":
                         driver.get(config['DEFAULT']['BARRACUDA_URL'] + "/cgi-mod/index.cgi")
+                        page_load = WebDriverWait(driver, int(config['DEFAULT']['TIMEOUT'])).until(expected_conditions.presence_of_element_located((By.ID, 'user')))
                     else:
-                        print("    > ERROR!: 'BARRACUDA_URL' cannot be empty.")
+                        print("    > ERROR!: Required field is empty in settings file.")
                         sys.exit(1)
+                except selenium_exceptions.TimeoutException:
+                    print("    > ERROR!: Your request has timed out.")
+                    sys.exit(1)
                 except (KeyError, TypeError, ValueError, selenium_exceptions.WebDriverException):
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
                 print("    > Trying to log in...")
 
-                try:
+                try:  # Try to find the username field and enter the configured username.
                     enter_username = driver.find_element_by_id('user')
                     if config['DEFAULT']['BARRACUDA_USERNAME'] != "":
                         enter_username.send_keys(config['DEFAULT']['BARRACUDA_USERNAME'])
                     else:
-                        print("    > ERROR!: 'BARRACUDA_USERNAME' cannot be empty.")
+                        print("    > ERROR!: Required field is empty in settings file.")
                         sys.exit(1)
                 except (KeyError, TypeError, ValueError):
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
-                try:
+                try:  # Try to find the password field and enter the conficured password.
                     enter_password = driver.find_element_by_id('password_entry')
                     if config['DEFAULT']['BARRACUDA_PASSWORD'] != "":
                         enter_password.send_keys(config['DEFAULT']['BARRACUDA_PASSWORD'])
                     else:
-                        print("    > ERROR!: 'BARRACUDA_PASSWORD' cannot be empty.")
+                        print("    > ERROR!: Required field is empty in settings file.")
                         sys.exit(1)
                 except (KeyError, TypeError, ValueError):
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
-                try:
+                try:  # Try to subbmit the credentials and wait for the page to load.
                     driver.find_element_by_id('Submit').click()
                     login_load = WebDriverWait(driver, int(config['DEFAULT']['TIMEOUT'])).until(expected_conditions.presence_of_element_located((By.LINK_TEXT, 'Message Log')))
                 except selenium_exceptions.TimeoutException:
@@ -158,7 +163,7 @@ if cur_version > req_version:
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
-                try:
+                try:  # Try to navigate the the 'Message Log' page and wait for it to load.
                     driver.find_element_by_link_text('Message Log').click()
                     log_load = WebDriverWait(driver, int(config['DEFAULT']['TIMEOUT'])).until(expected_conditions.presence_of_element_located((By.ID, 'filters1')))
                 except selenium_exceptions.TimeoutException:
@@ -175,10 +180,10 @@ if cur_version > req_version:
                 valnode_tag = 0
                 line_num = 0
                 data = ""
-                for line in search_data:
+                for line in search_data:  # Read each line in the search data
                     line_num += 1
                     line = line.strip().replace("\n", "")
-                    try:
+                    try:  # Try to validate line as an ip address. This is expected to throw a 'ValueError' exception on some lines.
                         if ipaddress.ip_address(line) == ipaddress.IPv4Address(line) or ipaddress.IPv6Address(line):
                             data = "IP Address"
                             if ip_counter is 0:
@@ -194,8 +199,7 @@ if cur_version > req_version:
                             elif ip_counter is not 0:
                                 filters_tag += 1
                                 valnode_tag += 1
-                                driver.find_element_by_css_selector(
-                                    '#filters{0} > option[value="search_sourceip"]'.format(filters_tag)).click()
+                                driver.find_element_by_css_selector('#filters{0} > option[value="search_sourceip"]'.format(filters_tag)).click()
                                 enter_ip = driver.find_element_by_id('valNode_{0}'.format(valnode_tag))
                                 enter_ip.send_keys(str(line))
                                 driver.find_element_by_id('filter_row_add_btn_1').click()
@@ -205,6 +209,7 @@ if cur_version > req_version:
                     except ValueError:
                         pass
 
+                    # Try to validate line as a domain name.
                     if re.fullmatch(r'\b((?=[a-z0-9-]{1,63}\.)(xn--)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}\b', line) is not None:
                         data = "Domain Name"
                         if ip_counter is 0:
@@ -220,8 +225,7 @@ if cur_version > req_version:
                         else:
                             filters_tag += 1
                             valnode_tag += 1
-                            driver.find_element_by_css_selector(
-                                '#filters{0} > option[value="search_from3"]'.format(filters_tag)).click()
+                            driver.find_element_by_css_selector('#filters{0} > option[value="search_from3"]'.format(filters_tag)).click()
                             enter_domain = driver.find_element_by_id('valNode_{0}'.format(valnode_tag))
                             enter_domain.send_keys(str(line))
                             driver.find_element_by_id('filter_row_add_btn_1').click()
@@ -229,14 +233,15 @@ if cur_version > req_version:
                             ip_counter += 1
                             continue
 
+                    # If the line is not an ip address or a domain name, print a log message showing that the line was unable to be processed.
                     if data != "IP Address" or "Domain Name":
                         print("        > LOG: Unable to process '{0}' on line '{1}' as it does not appear to be formatted as a domain or ip address.".format(line, line_num))
                         continue
         else:
-            print("    > ERROR!: 'SEARCH_DATA_FILE' cannot be empty.")
+            print("    > Required field is empty in settings file.")
             sys.exit(1)
 
-        print("    > BFS Auto Search successfully completed!")
+        print("    > BSF Auto Search successfully completed!")
     except IOError:
         print("    > ERROR!: Could not open configured 'SEARCH_DATA_FILE'.")
     except KeyError:
