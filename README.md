@@ -4,7 +4,8 @@ BFS Auto Search is a Python script that allows mass data entry into the Barracud
 ### Dependencies
 * Python > 3.4.0
 * Selenium Python Module >= 2.45.0
-* Selenium Browser Add-on (currently the script supports Firefox, Chrome, and IE)
+* [Selenium Browser Driver](http://www.seleniumhq.org/download/) (currently BSF Auto Search supports Firefox, Chrome, and IE)
+  * For best results, the Firefox browser driver is recommended. 
 
 ### Setup
 1. Install Python: https://www.python.org/downloads/
