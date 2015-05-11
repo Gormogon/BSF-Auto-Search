@@ -140,7 +140,7 @@ if cur_version > req_version:
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
-                try:  # Try to find the password field and enter the conficured password.
+                try:  # Try to find the password field and enter the configured password.
                     enter_password = driver.find_element_by_id('password_entry')
                     if config['DEFAULT']['BARRACUDA_PASSWORD'] != "":
                         enter_password.send_keys(config['DEFAULT']['BARRACUDA_PASSWORD'])
@@ -151,7 +151,7 @@ if cur_version > req_version:
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
-                try:  # Try to subbmit the credentials and wait for the page to load.
+                try:  # Try to submit the credentials and wait for the page to load.
                     driver.find_element_by_id('Submit').click()
                     login_load = WebDriverWait(driver, int(config['DEFAULT']['TIMEOUT'])).until(expected_conditions.presence_of_element_located((By.LINK_TEXT, 'Message Log')))
                 except selenium_exceptions.TimeoutException:
@@ -171,9 +171,9 @@ if cur_version > req_version:
                     print("    > ERROR!: Looks like there is a misconfiguration in your settings file.")
                     sys.exit(1)
 
-                print("    > Starting data entry process...")
+                print("    > Starting data entry process in 5 seconds...")
 
-                time.sleep(10)  # This is needed to allow for the javascript to load. Without it data entry will not be valid.
+                time.sleep(5)  # This is needed to allow for the javascript to load. Without it data entry will not be valid.
 
                 ip_counter = 0
                 filters_tag = 0
