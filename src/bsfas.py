@@ -21,6 +21,7 @@
 import argparse
 import configparser
 import ipaddress
+import time
 import re
 import ssl
 import sys
@@ -34,7 +35,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 
-BFS_AS_VERSION = '0.0.1'
+BSF_AS_VERSION = '0.0.2'
 
 req_version = (3, 4, 0)
 cur_version = sys.version_info
@@ -76,7 +77,7 @@ if cur_version > req_version:
 
     args = parser.parse_args()
 
-    # Handle submitted arguments, test connection, assign a webdriver class, and handle unconficured webdrivers.
+    # Handle submitted arguments, test connection, assign a webdriver class, and handle unconfigured webdrivers.
     if args.firefox:
         try:
             test_connection()
@@ -102,7 +103,7 @@ if cur_version > req_version:
             print("    > ERROR!: 'IEDriver' not found in PATH. Make sure it is installed.")
             sys.exit(1)
     elif args.version:
-        print("    > BFS Auto Search:", BFS_AS_VERSION)
+        print("    > BSF Auto Search:", BSF_AS_VERSION)
         sys.exit(0)
     else:
         parser.print_help()
@@ -171,6 +172,8 @@ if cur_version > req_version:
                     sys.exit(1)
 
                 print("    > Starting data entry process...")
+
+                time.sleep(10)  # This is needed to allow for the javascript to load. Without it data entry will not be valid.
 
                 ip_counter = 0
                 filters_tag = 0
