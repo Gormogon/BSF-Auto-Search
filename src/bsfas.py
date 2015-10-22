@@ -232,9 +232,33 @@ if cur_version > req_version:
                             driver.find_element_by_xpath('//*[@value=\'AND\']').click()
                             ip_counter += 1
                             continue
+							
+					# Try to validate line as a Email Address.
+                    if re.fullmatch(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", line) is not None:
+                        data = "Email Address"
+                        if ip_counter is 0:
+                            filters_tag += 1
+                            valnode_tag += 1
+                            driver.find_element_by_css_selector('option[value="search_from1"]').click()
+                            enter_email = driver.find_element_by_id('valNode_{0}'.format(valnode_tag))
+                            enter_email.send_keys(str(line))
+                            driver.find_element_by_id('filter_row_add_btn_1').click()
+                            driver.find_element_by_xpath('//*[@value=\'AND\']').click()
+                            ip_counter += 1
+                            continue
+                        else:
+                            filters_tag += 1
+                            valnode_tag += 1
+                            driver.find_element_by_css_selector('#filters{0} > option[value="search_from1"]'.format(filters_tag)).click()
+                            enter_email = driver.find_element_by_id('valNode_{0}'.format(valnode_tag))
+                            enter_email.send_keys(str(line))
+                            driver.find_element_by_id('filter_row_add_btn_1').click()
+                            driver.find_element_by_xpath('//*[@value=\'AND\']').click()
+                            ip_counter += 1
+                            continue
 
                     # If the line is not an ip address or a domain name, print a log message showing that the line was unable to be processed.
-                    if data != "IP Address" or "Domain Name":
+                    if data != "IP Address" or "Domain Name" or "Eamil Address":
                         print("        > LOG: Unable to process '{0}' on line '{1}' as it does not appear to be formatted as a domain or ip address.".format(line, line_num))
                         continue
         else:
