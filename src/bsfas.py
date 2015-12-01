@@ -232,8 +232,8 @@ if cur_version > req_version:
                             driver.find_element_by_xpath('//*[@value=\'AND\']').click()
                             ip_counter += 1
                             continue
-							
-					# Try to validate line as a Email Address.
+
+                    # Try to validate line as an Email Address.
                     if re.fullmatch(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", line) is not None:
                         data = "Email Address"
                         if ip_counter is 0:

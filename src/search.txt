@@ -4,3 +4,6 @@
 example.com
 example.net
 example.org
+test1@example.com
+test2@example.net
+test2@example.org
