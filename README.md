@@ -3,7 +3,7 @@ BSF Auto Search is a Python script that allows mass data entry into the Barracud
 
 ### Dependencies
 * Python > 3.4.0
-* Selenium Python Module >= 2.45.0
+* Selenium Python Module >= 2.48.0
 * [Selenium Browser Driver](http://www.seleniumhq.org/download/) (currently BSF Auto Search supports Firefox, Chrome, and IE)
   * For best results, the Firefox browser driver is recommended. 
 
