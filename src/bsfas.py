@@ -162,6 +162,8 @@ if cur_version > req_version:
                     sys.exit(1)
 
                 try:  # Try to navigate the the 'Message Log' page and wait for it to load.
+                    time.sleep(5)
+                    
                     driver.find_element_by_link_text('Message Log').click()
                     log_load = WebDriverWait(driver, int(config['DEFAULT']['TIMEOUT'])).until(expected_conditions.presence_of_element_located((By.ID, 'filters1')))
                 except selenium_exceptions.TimeoutException:
