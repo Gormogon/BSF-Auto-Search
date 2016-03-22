@@ -35,7 +35,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
 
-BSF_AS_VERSION = '0.0.2'
+BSF_AS_VERSION = '1.0.1'
 
 req_version = (3, 4, 0)
 cur_version = sys.version_info
@@ -163,7 +163,7 @@ if cur_version > req_version:
 
                 try:  # Try to navigate the the 'Message Log' page and wait for it to load.
                     time.sleep(5)
-                    
+
                     driver.find_element_by_link_text('Message Log').click()
                     log_load = WebDriverWait(driver, int(config['DEFAULT']['TIMEOUT'])).until(expected_conditions.presence_of_element_located((By.ID, 'filters1')))
                 except selenium_exceptions.TimeoutException:
