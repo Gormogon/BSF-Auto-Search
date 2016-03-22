@@ -26,7 +26,7 @@
   </tr>
   <tr>
     <td>
-      <p>Thanks goes to the [Selenium Browser Automation](http://www.seleniumhq.org/) project. BSF Auto Search would not have been possible without it.</p>
+      <p>Thanks goes to the <a href="http://www.seleniumhq.org/">Selenium Browser Automation</a> project. BSF Auto Search would not have been possible without it.</p>
     </td>
   </tr>
 </table>
